@@ -380,7 +380,7 @@ public class MediaDb {
 		c.setSharedCache(true);
 		c.setTransactionMode(TransactionMode.IMMEDIATE);
 		c.enforceForeignKeys(true);
-		c.setBusyTimeout((int) TimeUnit.SECONDS.toMillis(30));  // Should be longer than MediaMetadataStore.FILE_BATCH_MAX_DURATION.
+		c.setBusyTimeout((int) TimeUnit.SECONDS.toMillis(5000));  // Should be longer than MediaMetadataStore.FILE_BATCH_MAX_DURATION.
 		return c;
 	}
 
