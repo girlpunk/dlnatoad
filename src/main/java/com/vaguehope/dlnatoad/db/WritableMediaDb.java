@@ -35,20 +35,20 @@ public class WritableMediaDb implements Closeable {
 
 	@Override
 	public void close() throws IOException {
-		boolean committed = false;
-		try {
+		// boolean committed = false;
+		// try {
 			commitOrRollback();
-			committed = true;
-		}
-		finally {
-			try {
-				this.conn.close();
-			}
-			catch (final SQLException e) {
-				if (committed) throw new IOException("Failed to close DB connection.", e);
-				LOG.error("Failed to close DB connection", e);
-			}
-		}
+		// 	committed = true;
+		// }
+		// finally {
+		// 	try {
+		// 		this.conn.close();
+		// 	}
+		// 	catch (final SQLException e) {
+		// 		if (committed) throw new IOException("Failed to close DB connection.", e);
+		// 		LOG.error("Failed to close DB connection", e);
+		// 	}
+		// }
 	}
 
 	private void commitOrRollback() throws IOException {
