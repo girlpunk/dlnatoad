@@ -139,8 +139,8 @@ public final class Main {
 		final List<InetAddress> bindAddresses = args.getInterfaces();
 		final InetAddress selfAddress = NetHelper.guessSelfAddress(bindAddresses);
 
-		final ScheduledExecutorService fsExSvc = ExecutorHelper.newScheduledExecutor(1, "fs");
-		final ExecutorService miExSvc = ExecutorHelper.newExecutor(1, "mi");
+		final ScheduledExecutorService fsExSvc = ExecutorHelper.newScheduledExecutor(3, "fs");
+		final ExecutorService miExSvc = ExecutorHelper.newExecutor(3, "mi");
 
 		final File thumbsDir = args.getThumbsDir();
 		final ThumbnailGenerator thumbnailGenerator =
