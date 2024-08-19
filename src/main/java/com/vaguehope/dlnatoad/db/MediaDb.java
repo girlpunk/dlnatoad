@@ -37,6 +37,7 @@ public class MediaDb {
 	protected MediaDb(final String dbPath) throws SQLException {
 		this.dbPath = dbPath;
 		this.dbConn = makeDbConnection(dbPath);
+		this.dbConn.setAutoCommit(false);
 		makeSchema();
 		executeSql("PRAGMA optimize;");  // https://sqlite.org/lang_analyze.html
 	}
@@ -103,9 +104,9 @@ public class MediaDb {
 
 	@SuppressWarnings("resource")
 	public WritableMediaDb getWritable() throws SQLException {
-		final Connection c = makeDbConnection(this.dbPath);
-		c.setAutoCommit(false);
-		return new WritableMediaDb(c, this.writeCounter);
+		// final Connection c = makeDbConnection(this.dbPath);
+		// c.setAutoCommit(false);
+		return new WritableMediaDb(this.dbConn, this.writeCounter);
 	}
 
 	public PreparedStatement prepare(final String sql) throws SQLException {
@@ -380,7 +381,7 @@ public class MediaDb {
 		c.setSharedCache(true);
 		c.setTransactionMode(TransactionMode.IMMEDIATE);
 		c.enforceForeignKeys(true);
-		c.setBusyTimeout((int) TimeUnit.SECONDS.toMillis(5000));  // Should be longer than MediaMetadataStore.FILE_BATCH_MAX_DURATION.
+		c.setBusyTimeout((int) TimeUnit.SECONDS.toMillis(30));  // Should be longer than MediaMetadataStore.FILE_BATCH_MAX_DURATION.
 		return c;
 	}
 
