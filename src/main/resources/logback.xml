@@ -12,7 +12,9 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.vaguehope.dlnatoad" level="INFO" />
+	<logger name="dlnatoad" level="INFO" />
+
+	<logger name="org.eclipse.jetty.util.thread.QueuedThreadPool" level="ERROR" />
 
 	<logger name="org.jupnp.protocol.RetrieveRemoteDescriptors" level="ERROR" />
 	<logger name="org.jupnp.transport.impl.ServletUpnpStream" level="WARN" />

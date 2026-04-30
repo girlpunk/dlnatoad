@@ -1,9 +1,9 @@
 {{<page}}
 	{{$body}}
 	<div class="prevnext_bar">
-		{{#previous_path}}<a id="previous" href="{{{previous_path}}}">&lt;= Previous</a>{{/previous_path}}{{^previous_path}}<span></span>{{/previous_path}}
-		<a id="up" href="{{{up_path}}}">{{up_title}}</a>
-		{{#next_path}}<a id="next" href="{{{next_path}}}">Next =&gt;</a>{{/next_path}}{{^next_path}}<span></span>{{/next_path}}
+		{{#previous_path}}<a id="previous" href="{{{previous_path}}}">&lt;= Previous</a>{{/previous_path}}{{^previous_path}}<span id="previous"></span>{{/previous_path}}
+		<span class="title">{{prevnext_title}}</span>
+		{{#next_path}}<a id="next" href="{{{next_path}}}">Next =&gt;</a>{{/next_path}}{{^next_path}}<span id="next"></span>{{/next_path}}
 	</div>
 
 	<div class="mainimage">
@@ -19,6 +19,9 @@
 		<video controls>
 			<source src="{{item_path}}" type="{{type}}" />
 			<p>[ Browser does not suport playing this file ]</p>
+			{{#subtitles}}
+			<track label="{{label}}" kind="subtitles" src="{{path}}" />
+			{{/subtitles}}
 		</video>
 		{{/is_video}}
 
@@ -28,6 +31,10 @@
 			<p>[ Browser does not suport playing this file ]</p>
 		</video>
 		{{/is_audio}}
+
+		{{#is_doc}}
+			<embed class="document" src="{{item_path}}" type="{{type}}" />
+		{{/is_doc}}
 
 		{{#is_other}}
 		<p>{{item_file_name}}</p>
@@ -66,7 +73,7 @@
 				</div>
 				<input type="submit" value="Add">
 			</form>
-			<script src="../w/autocomplete-addtag.js"></script>
+			<script src="../w/{{cache_bust_prefix}}/autocomplete-addtag.js"></script>
 		</div>
 	</div>
 	{{/tags_edit_path}}
@@ -75,6 +82,7 @@
 	<div class="link_row">
 		<span class="left">
 			<a href="{{item_path}}" download="{{item_file_name}}">Download</a>
+			<a href="{{item_path}}"">Open</a>
 		</span>
 		<span class="right">
 			<a href="{{dir_path}}">{{dir_name}}</a>
@@ -82,7 +90,7 @@
 	</div>
 	<div class="text_details">{{details}}</div>
 
-	<script src="../w/item.js"></script>
+	<script src="../w/{{cache_bust_prefix}}/item.js"></script>
 	{{/body}}
 {{/page}}
 {{! vim: noexpandtab softtabstop=0

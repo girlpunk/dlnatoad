@@ -5,24 +5,35 @@
 	<title>{{page_title}}</title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0">
 	{{#db_enabled}}
-	<link rel="stylesheet" href="{{path_prefix}}w/autocomplete.css">
-	<script src="{{path_prefix}}w/third_party/autoComplete.10.2.7.min.js"></script>
+	<link rel="stylesheet" href="{{path_prefix}}w/{{cache_bust_prefix}}/autocomplete.css">
+	<script src="{{path_prefix}}w/{{cache_bust_prefix}}/third_party/autoComplete.10.2.7.min.js"></script>
 	{{/db_enabled}}
-	<link rel="stylesheet" href="{{path_prefix}}w/layout.css">
-	<link rel="stylesheet" href="{{path_prefix}}w/colours.css">
+	<link rel="stylesheet" href="{{path_prefix}}w/{{cache_bust_prefix}}/layout.css">
+	<link rel="stylesheet" href="{{path_prefix}}w/{{cache_bust_prefix}}/colours.css">
 </head>
 <body>
 	<div class="topbar">
-		{{$topbar}}{{/topbar}}
+		{{#up_link_path}}<span class="item"><a id="up" href="{{up_link_path}}">Up</a></span>{{/up_link_path}}
 		<span class="item"><a href="{{path_prefix}}./">Home</a></span>
 		{{#username}}
 		<span class="item">[ {{username}} ]</span>
 		{{/username}}
 		{{^username}}
-		<form action="" method="GET">
-			<input type="hidden" name="action" value="login">
-			<input type="submit" value="Login">
-		</form>
+		<div class="dropdown-holder" id="login_menu">
+			<button class="dropdown">Login</button>
+			<div class="dropdown-items">
+				<form action="" method="GET">
+					<input type="hidden" name="action" value="login">
+					<input type="submit" value="Basic">
+				</form>
+				{{#openid_enabled}}
+				<form action="" method="GET">
+					<input type="hidden" name="action" value="openidlogin">
+					<input type="submit" value="OpenID">
+				</form>
+				{{/openid_enabled}}
+			</div>
+		</div>
 		{{/username}}
 
 		<form class="expand" action="{{path_prefix}}search" method="GET">
@@ -32,22 +43,23 @@
 			</div>
 			<input type="hidden" name="extra_query" value="{{extra_query}}">
 			<span style="display: inline-flex;">
-				<input type="submit" value="Search">
+				<input type="submit" value="Search" style="display: none;">
 				{{#allow_remote_search}}
 				<div class="dropdown-holder" id="search_menu">
-					<button class=dropdown">...</button>
+					<button class="dropdown borderless">...</button>
 					<div class="dropdown-items">
 						<input type="submit" name="remote" value="Search Remote">
 					</div>
 				</div>
-				<script src="{{path_prefix}}w/menu.js"></script>
 				{{/allow_remote_search}}
 			</span>
 		</form>
 		{{#db_enabled}}
-		<script src="{{path_prefix}}w/autocomplete-search.js"></script>
+		<script src="{{path_prefix}}w/{{cache_bust_prefix}}/autocomplete-search.js"></script>
 		{{/db_enabled}}
 	</div>
+
+	<script src="{{path_prefix}}w/{{cache_bust_prefix}}/menu.js"></script>
 
 {{$body}}
 {{/body}}

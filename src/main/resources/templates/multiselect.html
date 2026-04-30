@@ -3,7 +3,7 @@
 	<button id="selection_none">None</button>
 	<button id="selection_all">All</button>
 	<p id="selection_msg"></p>
-	<button id="selection_edit_tags">Edit Tags</button>
+	<button id="selection_edit_tags">Tags</button>
 </div>
 
 <div id="tag_editor" style="display:none;">
@@ -14,7 +14,7 @@
 		<div class="autocomplete_wrapper addTag_wrapper">
 			<input type="text" id="addTag" name="addTag" class="newtag" value="" autocomplete="off" spellcheck=false autocorrect="off" autocapitalize="off">
 		</div>
-		<script src="{{path_prefix}}w/autocomplete-addtag.js"></script>
+		<script src="{{path_prefix}}w/{{cache_bust_prefix}}/autocomplete-addtag.js"></script>
 		<div class="tags">
 		</div>
 	</div>

@@ -39,7 +39,7 @@ input, button {
 .dropdown-holder {
   position: relative;
 }
-.dropdown-holder>button {
+.dropdown-holder>button.borderless {
   margin-left: 0;
   border: none;
 }
@@ -51,6 +51,7 @@ input, button {
   border-radius: 0.25em;
   padding: 1em;
   z-index: 1;
+  text-align: right;
 }
 
 .link_row {
@@ -244,6 +245,17 @@ input, button {
   display: flex;
   justify-content: space-between;
 }
+#previous {
+  flex-basis: 0;
+  flex-grow: 1;
+  text-wrap: nowrap;
+}
+#next {
+  flex-basis: 0;
+  flex-grow: 1;
+  text-wrap: nowrap;
+  text-align: right;
+}
 
 .mainimage {
   text-align: center;
@@ -251,7 +263,13 @@ input, button {
 }
 .mainimage img, .mainimage video {
   max-width: 100%;
-  max-height: 50em;
+  max-height: 70vh;
+}
+.mainimage video, .mainimage audio, .mainimage .document {
+  width: 100%;
+}
+.mainimage .document {
+  height: 70vh;
 }
 .mainimage .nav {
   position: absolute;
