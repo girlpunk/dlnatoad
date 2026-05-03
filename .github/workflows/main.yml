@@ -62,14 +62,34 @@ jobs:
     permissions:
       contents: read
       packages: write
-      checks: write
     steps:
       - uses: actions/checkout@v4
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - run: |
-          nix run .#mediatoad-docker.copyToRegistry -- --dest-creds="$DOCKER_USERNAME:$DOCKER_ACCESS_TOKEN" "$DOCKER_REPOSITORY"
+          nix run .#mediatoad-docker.copyToRegistry -- "$DOCKER_REGISTRY"
         env:
-          DOCKER_USERNAME: ${{ github.actor }}
-          DOCKER_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKER_REGISTRY: ${{ github.repository }}
+      - name: Add additional tags
+        run: |
+          CREDS="--src-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} --dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
+          BASE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+
+          # read the tag that was just pushed from the nix derivation
+          PUSHED=$(nix eval --raw .#mediatoad-docker.imageTag)
+
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+            skopeo copy --insecure-policy $CREDS "docker://${BASE}:${PUSHED}" "docker://${BASE}:${VERSION}"
+            skopeo copy --insecure-policy $CREDS "docker://${BASE}:${PUSHED}" "docker://${BASE}:latest"
+          else
+            SHA="$(echo $GITHUB_SHA | head -c 7)"
+            skopeo copy --insecure-policy $CREDS "docker://${BASE}:${PUSHED}" "docker://${BASE}:main"
+            skopeo copy --insecure-policy $CREDS "docker://${BASE}:${PUSHED}" "docker://${BASE}:sha-${SHA}"
+          fi
