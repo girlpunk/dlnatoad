@@ -75,10 +75,9 @@ jobs:
         run: |
           CREDS="--dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
 
-          SOURCE="$(nix eval --raw .#mediatoad-docker.outPath)"
           DEST="ghcr.io/${{ github.repository }}:$(nix eval --raw .#mediatoad-docker.imageTag)"
 
-          skopeo copy --insecure-policy $CREDS $SOURCE $DEST
+          nix run .#mediatoad-docker.copyTo $CREDS $DEST
       - name: Add additional tags
         run: |
           CREDS="--src-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} --dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
