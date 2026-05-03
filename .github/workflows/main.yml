@@ -75,7 +75,7 @@ jobs:
         run: |
           CREDS="--dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
 
-          DEST="ghcr.io/${{ github.repository }}:$(nix eval --raw .#mediatoad-docker.imageTag)"
+          DEST="docker://ghcr.io/${{ github.repository }}:$(nix eval --raw .#mediatoad-docker.imageTag)"
 
           nix run .#mediatoad-docker.copyTo $DEST -- $CREDS
       - name: Add additional tags
