@@ -64,22 +64,25 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - run: |
-          nix run .#mediatoad-docker.copyToRegistry -- "$DOCKER_REGISTRY"
-        env:
-          DOCKER_REGISTRY: ${{ github.repository }}
+
+      - name: "Build docker image"
+        run: |
+          nix build .#mediatoad-docker
+
+      - name: "Upload Docker Image"
+        run: |
+          CREDS="--dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
+
+          SOURCE="$(nix eval --raw .#mediatoad-docker.outPath)"
+          DEST="ghcr.io/${{ github.repository }}:$(nix eval --raw .#mediatoad-docker.imageTag)"
+
+          skopeo copy --insecure-policy $CREDS $SOURCE $DEST
       - name: Add additional tags
         run: |
           CREDS="--src-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} --dest-creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}"
-          BASE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          BASE="ghcr.io/${{ github.repository }}"
 
           # read the tag that was just pushed from the nix derivation
           PUSHED=$(nix eval --raw .#mediatoad-docker.imageTag)
